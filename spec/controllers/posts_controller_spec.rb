@@ -26,13 +26,19 @@ RSpec.describe PostsController, type: :controller do
         }.to change(Post, :count).by(1)
       end
     end
-    context "with invalid params" do
+    context "with invalid title" do
       it "returns a failure response" do
-        # post :create, params: {post: {title: nil, body: 'This should fails'}}
-        # expect{response).to have_http_status(:unprocessable_entity)
-        expect {
-          post :create, params: {post: {title: nil, body: 'This should fails'}}
-        }.to raise_error(ActionController::ParameterMissing)
+        # expect {
+        #   post :create, params: {post: {title: nil, body: 'This should fails'}}
+        # }.to have_http_status(:unprocessable_entity)
+        post :create, params: {post: {title: nil, body: 'This should fail'}}
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+    context "with invalid body" do
+      it "returns a failure response" do
+        post :create, params: {post: {title: "This should fail", body: nil}}
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
